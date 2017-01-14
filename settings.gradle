@@ -1,0 +1,4 @@
+rootProject.name = 'safe-serf'
+
+include "api"
+include "background-worker"

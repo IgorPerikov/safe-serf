@@ -1,0 +1,41 @@
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath 'com.netflix.nebula:gradle-lint-plugin:latest.release'
+        classpath 'com.netflix.nebula:nebula-release-plugin:latest.release'
+    }
+}
+
+allprojects {
+    group 'org.clayman'
+    version '0.1'
+
+    apply plugin: 'nebula.lint'
+    apply plugin: 'nebula.nebula-release'
+    apply plugin: 'java'
+    apply plugin: 'idea'
+}
+
+subprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+
+    gradleLint {
+        rules  = ['all-dependency']
+        criticalRules = ['archaic-wrapper', 'duplicate-dependency-class']
+    }
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    ext {
+
+    }
+
+    dependencies {
+
+    }
+}
