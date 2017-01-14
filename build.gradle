@@ -12,8 +12,6 @@ allprojects {
 
     apply plugin: 'nebula.lint'
     apply plugin: 'nebula.nebula-release'
-    apply plugin: 'java'
-    apply plugin: 'idea'
 }
 
 subprojects {
@@ -22,6 +20,8 @@ subprojects {
         mavenCentral()
         jcenter()
     }
+
+    apply plugin: 'java'
 
     gradleLint {
         rules  = ['all-dependency']
@@ -32,10 +32,10 @@ subprojects {
     targetCompatibility = 1.8
 
     ext {
-
+        guavaVersion = '21.0'
     }
 
     dependencies {
-
+        compile "com.google.guava:guava:${guavaVersion}"
     }
 }
