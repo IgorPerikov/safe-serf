@@ -32,7 +32,8 @@ subprojects {
     targetCompatibility = 1.8
 
     ext {
-        guavaVersion = '21.0'
+        // TODO: https://github.com/datastax/java-driver/pull/769
+        guavaVersion = '19.0'
     }
 
     dependencies {
