@@ -1,6 +1,5 @@
-CREATE TABLE IF NOT EXISTS orders.orders (
+CREATE TABLE IF NOT EXISTS orders.order_results (
     id uuid,
     url text,
-    is_ready boolean,
  PRIMARY KEY (id))
  WITH compaction = { 'class': 'LeveledCompactionStrategy' };
