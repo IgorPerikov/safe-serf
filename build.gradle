@@ -34,6 +34,9 @@ subprojects {
     ext {
         // TODO: https://github.com/datastax/java-driver/pull/769
         guavaVersion = '19.0'
+
+        slf4jVersion = '1.7.22'
+        logbackVersion = '1.1.8'
     }
 
     dependencies {

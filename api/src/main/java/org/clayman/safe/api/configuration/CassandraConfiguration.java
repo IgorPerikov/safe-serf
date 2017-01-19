@@ -13,6 +13,7 @@ import java.net.InetSocketAddress;
 public class CassandraConfiguration {
 
     public static final int CASSANDRA_DEFAULT_PORT = 9042;
+    public static final String ORDER_KEYSPACE = "orders";
 
     @Bean(destroyMethod = "close")
     public Cluster cluster() {
@@ -24,7 +25,7 @@ public class CassandraConfiguration {
 
     @Bean(destroyMethod = "close")
     public Session session(Cluster cluster) {
-        return cluster.connect();
+        return cluster.connect(ORDER_KEYSPACE);
     }
 
     @Bean
