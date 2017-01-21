@@ -12,16 +12,19 @@ import java.util.UUID;
 public class OrderService {
 
     @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
     private OrderMessagingService orderMessagingService;
 
-    public Order acceptNewOrder(Order order) {
+    @Autowired
+    private OrderRepository orderRepository;
+
+    public Order acceptOrder(Order order) {
         order.setId(UUID.randomUUID());
-        // TODO: check if available in cache
+        handleNewOrder(order);
+        return order;
+    }
+
+    private void handleNewOrder(Order order) {
         orderRepository.save(order);
         orderMessagingService.sendNewOrderInfo(order);
-        return order;
     }
 }

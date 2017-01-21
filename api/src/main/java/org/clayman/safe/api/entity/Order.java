@@ -15,7 +15,7 @@ public class Order {
     private String url;
 
     @Column(name = "is_ready")
-    private boolean isReady;
+    private boolean isReady = false;
 
     public UUID getId() {
         return id;

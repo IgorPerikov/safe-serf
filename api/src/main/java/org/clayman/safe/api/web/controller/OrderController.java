@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+// TODO: wrap in response entities
 @RestController
 public class OrderController {
 
@@ -20,7 +21,8 @@ public class OrderController {
 
     @RequestMapping(value = "/order", method = RequestMethod.POST)
     public Order createOrder(@RequestBody Order order) {
-        return orderService.acceptNewOrder(order);
+        // TODO: validate url and return 400 if so
+        return orderService.acceptOrder(order);
     }
 
     @RequestMapping(value = "/order/{id}/result", method = RequestMethod.GET)

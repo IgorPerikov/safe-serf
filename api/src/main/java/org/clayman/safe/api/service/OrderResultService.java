@@ -14,6 +14,7 @@ public class OrderResultService {
     private OrderResultRepository orderResultRepository;
 
     public OrderResult getResult(UUID id) {
+        // throw 404 if not found, currently empty 200
         return orderResultRepository.find(id);
     }
 }

@@ -3,7 +3,10 @@ package org.clayman.safe.api.configuration;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.ProtocolOptions;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.extras.codecs.enums.EnumNameCodec;
+import com.datastax.driver.extras.codecs.jdk8.InstantCodec;
 import com.datastax.driver.mapping.MappingManager;
+import org.clayman.safe.api.entity.Status;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,7 +23,11 @@ public class CassandraConfiguration {
         Cluster.Builder clusterBuilder = Cluster.builder()
                 .addContactPointsWithPorts(new InetSocketAddress("localhost", CASSANDRA_DEFAULT_PORT))
                 .withCompression(ProtocolOptions.Compression.LZ4);
-        return clusterBuilder.build();
+        Cluster cluster = clusterBuilder.build();
+        cluster.getConfiguration().getCodecRegistry()
+                .register(new EnumNameCodec<>(Status.class))
+                .register(InstantCodec.instance);
+        return cluster;
     }
 
     @Bean(destroyMethod = "close")
