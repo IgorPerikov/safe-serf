@@ -10,15 +10,12 @@ buildscript {
 apply plugin: 'org.springframework.boot'
 
 ext {
-    kafkaVersion = '0.10.1.1'
     cassandraDriverVersion = '3.1.3'
     lz4Version = "1.3.0"
 }
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
-
-    compile "org.apache.kafka:kafka-clients:${kafkaVersion}"
 
     compile "com.datastax.cassandra:cassandra-driver-core:${cassandraDriverVersion}"
     compile "com.datastax.cassandra:cassandra-driver-extras:${cassandraDriverVersion}"
