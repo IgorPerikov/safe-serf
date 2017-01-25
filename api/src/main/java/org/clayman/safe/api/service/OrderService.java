@@ -1,8 +1,8 @@
 package org.clayman.safe.api.service;
 
 import org.clayman.safe.api.entity.Order;
-import org.clayman.safe.api.service.kafka.OrderMessagingService;
 import org.clayman.safe.api.repository.OrderRepository;
+import org.clayman.safe.api.service.kafka.OrderMessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

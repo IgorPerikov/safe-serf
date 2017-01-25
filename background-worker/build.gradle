@@ -9,9 +9,15 @@ buildscript {
 
 apply plugin: 'org.springframework.boot'
 
+configurations {
+    all*.exclude group: 'io.netty', module: 'netty-transport-native-epoll'
+}
+
 ext {
-    caffeineVersion = '2.3.5'
     hystrixVersion = '1.5.8'
+    okhttpVersion = '3.5.0'
+    jacksonVersion = '2.8.6'
+    caffeineVersion = '2.3.5'
 }
 
 dependencies {
@@ -19,6 +25,11 @@ dependencies {
 
     compile "com.netflix.hystrix:hystrix-core:${hystrixVersion}"
     compile "com.netflix.hystrix:hystrix-javanica:${hystrixVersion}"
+
+    compile "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+
+    compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
     compile "com.github.ben-manes.caffeine:caffeine:${caffeineVersion}"
 }

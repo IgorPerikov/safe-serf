@@ -7,6 +7,7 @@ import org.clayman.safe.background.repository.OrderResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -27,7 +28,12 @@ public class SafeCheckService {
         if (cacheService.contains(url)) {
             status = cacheService.get(url);
         } else {
-            status = safeApiClient.checkUrl(url);
+            try {
+                status = safeApiClient.checkUrl(url);
+            } catch (IOException e) {
+                // TODO: retry later?
+                return;
+            }
             cacheService.put(url, status);
         }
         OrderResult orderResult = new OrderResult();
