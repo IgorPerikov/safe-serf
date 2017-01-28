@@ -10,15 +10,16 @@ import javax.annotation.Nullable;
 public class CacheService {
 
     public boolean contains(@Nonnull String url) {
-
+        // TODO: stub
+        return false;
     }
 
     public void put(@Nonnull String url, @Nonnull Status status) {
-
+        // TODO: stub
     }
 
     @Nullable
     public Status get(String url) {
-
+        throw new UnsupportedOperationException();
     }
 }

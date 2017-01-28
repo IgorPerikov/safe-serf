@@ -2,11 +2,13 @@ package org.clayman.safe.background.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.clayman.safe.background.entity.Status;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.List;
 
 public class CertlyApiClient implements SafeApiClient {
@@ -22,9 +24,16 @@ public class CertlyApiClient implements SafeApiClient {
     private String template = "https://api.certly.io/v1/lookup?url={url}&token={token}";
 
     @Override
-    // TODO: fill hystrix command props
-//    @HystrixCommand()
-    public Status checkUrl(String url) throws IOException {
+    @HystrixCommand(
+            fallbackMethod = "getFallbackResult",
+            threadPoolProperties = {
+
+            },
+            commandProperties = {
+                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000")
+            }
+    )
+    public Status checkUrl(String url) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(template
@@ -32,10 +41,20 @@ public class CertlyApiClient implements SafeApiClient {
                         .replace("{token}", apiToken))
                 .build();
 
-        String responseBody = client.newCall(request).execute().body().string();
-        ResultDto resultDto = objectMapper.readValue(responseBody, ResultDto.class);
+        ResultDto resultDto;
+
+        try {
+            String responseBody = client.newCall(request).execute().body().string();
+            resultDto = objectMapper.readValue(responseBody, ResultDto.class);
+        } catch (IOException ioe) {
+            throw new UncheckedIOException(ioe);
+        }
 
         return resultDto.getData().get(0).getStatus();
+    }
+
+    public Status getFallbackResult(String url) {
+        return Status.UNKNOWN;
     }
 }
 

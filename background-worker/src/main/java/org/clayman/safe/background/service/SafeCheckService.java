@@ -28,12 +28,7 @@ public class SafeCheckService {
         if (cacheService.contains(url)) {
             status = cacheService.get(url);
         } else {
-            try {
-                status = safeApiClient.checkUrl(url);
-            } catch (IOException e) {
-                // TODO: retry later?
-                return;
-            }
+            status = safeApiClient.checkUrl(url);
             cacheService.put(url, status);
         }
         OrderResult orderResult = new OrderResult();
