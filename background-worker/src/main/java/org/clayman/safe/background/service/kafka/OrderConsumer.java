@@ -21,7 +21,7 @@ public class OrderConsumer {
     @Autowired
     private Consumer<String, String> consumer;
 
-    @Scheduled(fixedDelay = 60_000L)
+    @Scheduled(fixedDelay = 10_000L)
     public void startConsuming() {
         log.info("Consuming data from kafka");
         ConsumerRecords<String, String> records = consumer.poll(0L);

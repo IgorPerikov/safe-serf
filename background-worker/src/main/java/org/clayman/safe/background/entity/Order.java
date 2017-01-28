@@ -14,9 +14,6 @@ public class Order {
     @Column(name = "url")
     private String url;
 
-    @Column(name = "is_ready")
-    private boolean isReady = false;
-
     public UUID getId() {
         return id;
     }
@@ -31,13 +28,5 @@ public class Order {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public boolean getIsReady() {
-        return isReady;
-    }
-
-    public void setIsReady(boolean ready) {
-        isReady = ready;
     }
 }
