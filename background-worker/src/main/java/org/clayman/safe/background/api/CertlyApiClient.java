@@ -6,12 +6,16 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.clayman.safe.background.entity.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
 
 public class CertlyApiClient implements SafeApiClient {
+
+    private static final Logger log = LoggerFactory.getLogger(CertlyApiClient.class);
 
     private String apiToken;
     private ObjectMapper objectMapper;
@@ -34,6 +38,7 @@ public class CertlyApiClient implements SafeApiClient {
             }
     )
     public Status checkUrl(String url) {
+        log.info("Starting check for url={}", url);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(template
@@ -50,10 +55,15 @@ public class CertlyApiClient implements SafeApiClient {
             throw new UncheckedIOException(ioe);
         }
 
-        return resultDto.getData().get(0).getStatus();
+        Status status = resultDto.getData().get(0).getStatus();
+
+        log.info("Completed check for url={}, result={}", url, status.toString());
+
+        return status;
     }
 
     public Status getFallbackResult(String url) {
+        log.info("Fallback result for url={}", url);
         return Status.UNKNOWN;
     }
 }

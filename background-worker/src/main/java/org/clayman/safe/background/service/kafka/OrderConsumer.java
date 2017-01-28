@@ -23,9 +23,11 @@ public class OrderConsumer {
 
     @Scheduled(fixedDelay = 60_000L)
     public void startConsuming() {
-        log.info("Consuming data from Kafka");
+        log.info("Consuming data from kafka");
         ConsumerRecords<String, String> records = consumer.poll(0L);
-        for (ConsumerRecord<String, String> record : records)
+        for (ConsumerRecord<String, String> record : records) {
             safeCheckService.handle(record.key(), record.value());
+        }
+        log.info("Complete orders handling from kafka");
     }
 }
