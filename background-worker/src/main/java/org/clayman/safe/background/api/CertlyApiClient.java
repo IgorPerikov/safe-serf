@@ -63,7 +63,7 @@ public class CertlyApiClient implements SafeApiClient {
     }
 
     // TODO: retry logic?
-    public Status getFallbackResult(String url) {
+    private Status getFallbackResult(String url) {
         log.info("Fallback result for url={}", url);
         return Status.UNKNOWN;
     }
