@@ -2,6 +2,7 @@ package org.clayman.safe.api.entity;
 
 import com.datastax.driver.mapping.annotations.Column;
 import com.datastax.driver.mapping.annotations.Table;
+import org.clayman.safe.api.validation.Url;
 
 import java.util.UUID;
 
@@ -11,6 +12,7 @@ public class Order {
     @Column(name = "id")
     private UUID id;
 
+    @Url
     @Column(name = "url")
     private String url;
 
