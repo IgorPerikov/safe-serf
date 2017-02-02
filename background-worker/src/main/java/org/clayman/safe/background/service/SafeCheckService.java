@@ -26,7 +26,7 @@ public class SafeCheckService {
     @Autowired
     private OrderResultRepository orderResultRepository;
 
-    public void handle(String orderUuid, String url) {
+    public void handle(UUID orderUuid, String url) {
         log.info("Start handling order with uuid={}", orderUuid);
         Status status = cacheService.get(url);
         if (status == null) {
@@ -38,7 +38,7 @@ public class SafeCheckService {
         }
         OrderResult orderResult = new OrderResult();
         orderResult.setCheckDate(Instant.now());
-        orderResult.setId(UUID.fromString(orderUuid));
+        orderResult.setId(orderUuid);
         orderResult.setStatus(status);
         orderResult.setUrl(url);
         orderResultRepository.save(orderResult);

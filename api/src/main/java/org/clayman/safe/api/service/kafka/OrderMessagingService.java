@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class OrderMessagingService {
 
@@ -16,10 +18,10 @@ public class OrderMessagingService {
     private static final String TOPIC_NAME = "orders";
 
     @Autowired
-    private Producer<String, String> producer;
+    private Producer<UUID, String> producer;
 
     public void sendNewOrderInfo(Order order) {
-        producer.send(new ProducerRecord<>(TOPIC_NAME, order.getId().toString(), order.getUrl()));
+        producer.send(new ProducerRecord<>(TOPIC_NAME, order.getId(), order.getUrl()));
         log.info("Successfully send order to kafka with id={}", order.getId().toString());
     }
 }
