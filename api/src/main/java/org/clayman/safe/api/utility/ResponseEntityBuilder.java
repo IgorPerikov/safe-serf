@@ -2,9 +2,11 @@ package org.clayman.safe.api.utility;
 
 import org.springframework.http.ResponseEntity;
 
+import javax.annotation.Nullable;
+
 public class ResponseEntityBuilder {
 
-    public static <T> ResponseEntity<T> of(T entity) {
+    public static <T> ResponseEntity<T> of(@Nullable T entity) {
         if (entity == null) {
             return notFoundResponse();
         } else {

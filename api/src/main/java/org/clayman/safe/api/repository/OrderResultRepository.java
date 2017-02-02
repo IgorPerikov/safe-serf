@@ -12,6 +12,7 @@ import org.clayman.safe.api.entity.OrderResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import java.util.UUID;
 
@@ -33,6 +34,7 @@ public class OrderResultRepository {
         mapper = mappingManager.mapper(OrderResult.class);
     }
 
+    @Nullable
     public OrderResult find(UUID id) {
         Statement statement = QueryBuilder
                 .select()
