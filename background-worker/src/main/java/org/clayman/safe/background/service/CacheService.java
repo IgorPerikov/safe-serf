@@ -1,6 +1,8 @@
 package org.clayman.safe.background.service;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import org.clayman.safe.background.entity.Status;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
@@ -9,17 +11,15 @@ import javax.annotation.Nullable;
 @Service
 public class CacheService {
 
-    public boolean contains(@Nonnull String url) {
-        // TODO: stub
-        return false;
-    }
+    @Autowired
+    private Cache<String, Status> cache;
 
     public void put(@Nonnull String url, @Nonnull Status status) {
-        // TODO: stub
+        cache.put(url, status);
     }
 
     @Nullable
     public Status get(String url) {
-        throw new UnsupportedOperationException();
+        return cache.getIfPresent(url);
     }
 }

@@ -28,14 +28,13 @@ public class SafeCheckService {
 
     public void handle(String orderUuid, String url) {
         log.info("Start handling order with uuid={}", orderUuid);
-        Status status;
-        if (cacheService.contains(url)) {
-            log.info("Cache hit for url={}", url);
-            status = cacheService.get(url);
-        } else {
+        Status status = cacheService.get(url);
+        if (status == null) {
             log.info("Cache miss for url={}", url);
             status = safeApiClient.checkUrl(url);
             cacheService.put(url, status);
+        } else {
+            log.info("Cache hit for url={}", url);
         }
         OrderResult orderResult = new OrderResult();
         orderResult.setCheckDate(Instant.now());
