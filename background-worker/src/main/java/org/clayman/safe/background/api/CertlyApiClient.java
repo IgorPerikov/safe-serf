@@ -44,6 +44,7 @@ public class CertlyApiClient implements SafeApiClient {
             String responseBody = client.newCall(request).execute().body().string();
             resultDto = objectMapper.readValue(responseBody, ResultDto.class);
         } catch (IOException ioe) {
+            log.info("Check result failed, exception message is={}", ioe.getMessage());
             return Status.UNKNOWN;
         }
 

@@ -31,9 +31,9 @@ public class OrderConsumer {
     @Autowired
     private Consumer<UUID, String> consumer;
 
-    @Scheduled(fixedDelay = 1_000L)
+    @Scheduled(fixedDelay = 3_000L)
     public void startConsuming() {
-        log.info("Consuming data from kafka");
+        log.debug("Consuming data from kafka");
         ConsumerRecords<UUID, String> records = consumer.poll(0L);
         List<CompletableFuture<Void>> tasks = new ArrayList<>();
         for (ConsumerRecord<UUID, String> record : records) {
@@ -42,7 +42,7 @@ public class OrderConsumer {
             }, executorService);
             tasks.add(cf);
         }
-        log.info("Complete sending tasks to executor");
+        log.debug("Complete sending tasks to executor");
 
         CompletableFuture<Void> cfBarrier = CompletableFuture.allOf(tasks.toArray(new CompletableFuture[tasks.size()]));
         try {
@@ -53,6 +53,6 @@ public class OrderConsumer {
 
         }
 
-        log.info("Complete handling orders");
+        log.debug("Complete handling orders");
     }
 }

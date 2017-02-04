@@ -3,6 +3,7 @@ package org.clayman.safe.background.service;
 import org.clayman.safe.background.api.SafeApiClient;
 import org.clayman.safe.background.entity.OrderResult;
 import org.clayman.safe.background.entity.Status;
+import org.clayman.safe.background.repository.OrderRepository;
 import org.clayman.safe.background.repository.OrderResultRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,9 @@ public class SafeCheckService {
     @Autowired
     private OrderResultRepository orderResultRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
     public void handle(UUID orderUuid, String url) {
         log.info("Start handling order with uuid={}", orderUuid);
         Status status = cacheService.get(url);
@@ -42,6 +46,7 @@ public class SafeCheckService {
         orderResult.setStatus(status);
         orderResult.setUrl(url);
         orderResultRepository.save(orderResult);
+        orderRepository.setIsReady(orderUuid);
         log.info("Complete handling order with uuid={}", orderUuid);
     }
 }

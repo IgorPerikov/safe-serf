@@ -24,10 +24,10 @@ public class KafkaConfiguration {
     @Bean
     public ExecutorService executorService(
             @Value(
-                    value = "${kafka.consumer.pool.size:#{T(java.lang.Runtime).availableProcessors()}}"
+                    value = "${kafka.consumer.pool.size:#{T(java.lang.Runtime).getRuntime().availableProcessors()}}"
             ) int poolSize,
             @Value(
-                    value = "${kafka.consumer.queue.size:#{T(java.lang.Runtime).availableProcessors() * 4}}"
+                    value = "${kafka.consumer.queue.size:#{T(java.lang.Runtime).getRuntime().availableProcessors() * 4}}"
             ) int queueSize) {
         return new ThreadPoolExecutor(poolSize, poolSize, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(queueSize));
     }

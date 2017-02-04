@@ -13,12 +13,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
+import javax.management.Query;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Repository
 public class OrderRepository {
 
     private static final String TABLE_NAME = "orders";
+    private static final String CREATED_AT_COLUMN_NAME = "created_at";
+    private static final String IS_READY_COLUMN_NAME = "is_ready";
+
+    private static final Integer OUTDATE_MINUTES_COUNT = 10;
+    private static final Integer OUTDATE_TASKS_LIMIT = 20;
 
     @Autowired
     private Session session;
@@ -33,18 +43,22 @@ public class OrderRepository {
         mapper = mappingManager.mapper(Order.class);
     }
 
-    public Order find(UUID id) {
+    public void save(Order order) {
+        mapper.save(order);
+    }
+
+    public List<Order> findOutdatedOrders() {
+        Instant now = Instant.now();
         Statement statement = QueryBuilder
                 .select()
                 .from(TABLE_NAME)
-                .where(QueryBuilder.eq("id", id));
+                .allowFiltering()
+                .where(QueryBuilder.lt(CREATED_AT_COLUMN_NAME, now.minus(OUTDATE_MINUTES_COUNT, ChronoUnit.MINUTES)))
+                .and(QueryBuilder.eq(IS_READY_COLUMN_NAME, false))
+                .limit(OUTDATE_TASKS_LIMIT);
         statement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
         ResultSet resultSet = session.execute(statement);
         Result<Order> mappedOrders = mapper.map(resultSet);
-        return mappedOrders.one();
-    }
-
-    public void save(Order order) {
-        mapper.save(order);
+        return mappedOrders.all();
     }
 }
