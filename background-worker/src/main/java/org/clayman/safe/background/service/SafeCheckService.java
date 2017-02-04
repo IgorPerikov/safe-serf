@@ -40,6 +40,11 @@ public class SafeCheckService {
         } else {
             log.info("Cache hit for url={}", url);
         }
+        storeResult(orderUuid, url, status);
+        log.info("Complete handling order with uuid={}", orderUuid);
+    }
+
+    private void storeResult(UUID orderUuid, String url, Status status) {
         OrderResult orderResult = new OrderResult();
         orderResult.setCheckDate(Instant.now());
         orderResult.setId(orderUuid);
@@ -47,6 +52,5 @@ public class SafeCheckService {
         orderResult.setUrl(url);
         orderResultRepository.save(orderResult);
         orderRepository.setIsReady(orderUuid);
-        log.info("Complete handling order with uuid={}", orderUuid);
     }
 }
