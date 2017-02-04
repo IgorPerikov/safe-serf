@@ -1,8 +1,6 @@
 package org.clayman.safe.background.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.clayman.safe.background.entity.Status;
@@ -10,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class CertlyApiClient implements SafeApiClient {
 
@@ -28,18 +26,12 @@ public class CertlyApiClient implements SafeApiClient {
     private String template = "https://api.certly.io/v1/lookup?url={url}&token={token}";
 
     @Override
-    @HystrixCommand(
-            fallbackMethod = "getFallbackResult",
-            threadPoolProperties = {
-
-            },
-            commandProperties = {
-                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000")
-            }
-    )
     public Status checkUrl(String url) {
         log.info("Starting check for url={}", url);
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .readTimeout(1500, TimeUnit.MILLISECONDS)
+                .connectTimeout(250, TimeUnit.MILLISECONDS)
+                .build();
         Request request = new Request.Builder()
                 .url(template
                         .replace("{url}", url)
@@ -52,7 +44,7 @@ public class CertlyApiClient implements SafeApiClient {
             String responseBody = client.newCall(request).execute().body().string();
             resultDto = objectMapper.readValue(responseBody, ResultDto.class);
         } catch (IOException ioe) {
-            throw new UncheckedIOException(ioe);
+            return Status.UNKNOWN;
         }
 
         Status status = resultDto.getData().get(0).getStatus();
@@ -60,12 +52,6 @@ public class CertlyApiClient implements SafeApiClient {
         log.info("Completed check for url={}, result={}", url, status.toString());
 
         return status;
-    }
-
-    // TODO: retry logic?
-    private Status getFallbackResult(String url) {
-        log.info("Fallback result for url={}", url);
-        return Status.UNKNOWN;
     }
 }
 

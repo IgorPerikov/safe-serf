@@ -14,7 +14,6 @@ configurations {
 }
 
 ext {
-    hystrixVersion = '1.5.8'
     okhttpVersion = '3.5.0'
     jacksonVersion = '2.8.6'
     caffeineVersion = '2.3.5'
@@ -22,9 +21,6 @@ ext {
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter"
-
-    compile "com.netflix.hystrix:hystrix-core:${hystrixVersion}"
-    compile "com.netflix.hystrix:hystrix-javanica:${hystrixVersion}"
 
     compile "com.squareup.okhttp3:okhttp:${okhttpVersion}"
 

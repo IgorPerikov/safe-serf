@@ -10,7 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 
 @Service
 public class OrderConsumer {
@@ -21,15 +26,33 @@ public class OrderConsumer {
     private SafeCheckService safeCheckService;
 
     @Autowired
+    private ExecutorService executorService;
+
+    @Autowired
     private Consumer<UUID, String> consumer;
 
-    @Scheduled(fixedDelay = 10_000L)
+    @Scheduled(fixedDelay = 1_000L)
     public void startConsuming() {
         log.info("Consuming data from kafka");
         ConsumerRecords<UUID, String> records = consumer.poll(0L);
+        List<CompletableFuture<Void>> tasks = new ArrayList<>();
         for (ConsumerRecord<UUID, String> record : records) {
-            safeCheckService.handle(record.key(), record.value());
+            CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
+                safeCheckService.handle(record.key(), record.value());
+            }, executorService);
+            tasks.add(cf);
         }
-        log.info("Complete orders handling from kafka");
+        log.info("Complete sending tasks to executor");
+
+        CompletableFuture<Void> cfBarrier = CompletableFuture.allOf(tasks.toArray(new CompletableFuture[tasks.size()]));
+        try {
+            cfBarrier.get();
+        } catch (ExecutionException ignored) {
+            // fallback already provided by task logic
+        } catch (InterruptedException ignored) {
+
+        }
+
+        log.info("Complete handling orders");
     }
 }
