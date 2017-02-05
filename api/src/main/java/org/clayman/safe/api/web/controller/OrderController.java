@@ -21,12 +21,13 @@ public class OrderController {
     @Autowired
     private OrderResultService orderResultService;
 
-    @RequestMapping(value = "/order", method = RequestMethod.POST)
+    @PostMapping("/order")
     public ResponseEntity<Order> createOrder(@RequestBody @Valid Order order) {
+        // TODO: add token check
         return ResponseEntityBuilder.of(orderService.acceptOrder(order));
     }
 
-    @RequestMapping(value = "/order/{id}/result", method = RequestMethod.GET)
+    @GetMapping("/order/{id}/result")
     public ResponseEntity<OrderResult> getResult(@PathVariable UUID id) {
         return ResponseEntityBuilder.of(orderResultService.getResult(id));
     }

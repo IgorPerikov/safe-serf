@@ -8,4 +8,6 @@ hs_err_pid*
 /out/
 .gradle
 /build/
+
 token.properties
+secret.properties
