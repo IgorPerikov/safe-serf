@@ -16,6 +16,12 @@ public class TokenDto {
         this.balance = token.getBalance();
     }
 
+    public TokenDto(String login, String token, Integer balance) {
+        this.login = login;
+        this.token = token;
+        this.balance = balance;
+    }
+
     public String getLogin() {
         return login;
     }

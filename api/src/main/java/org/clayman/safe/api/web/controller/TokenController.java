@@ -18,7 +18,6 @@ public class TokenController {
     private TokenService tokenService;
 
     @GetMapping("/token/remember")
-    // TODO: possible 404
     public ResponseEntity<TokenDto> returnBalanceAndTokenByUserCredentials(
             @RequestParam String login,
             @RequestParam String password
@@ -27,13 +26,11 @@ public class TokenController {
     }
 
     @GetMapping("/token/balance")
-    // TODO: possible 404
     public ResponseEntity<TokenDto> returnBalanceByUserToken(@RequestParam String token) {
         return ResponseEntityBuilder.of(tokenService.returnTokenById(token));
     }
 
     @PostMapping("/token/register")
-    // TODO: possible 409
     public ResponseEntity<TokenDto> registerNewUser(@RequestParam String login, @RequestParam String password) {
         return ResponseEntityBuilder.of(tokenService.registerNewToken(login, password));
     }
