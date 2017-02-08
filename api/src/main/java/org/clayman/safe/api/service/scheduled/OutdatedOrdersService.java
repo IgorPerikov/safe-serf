@@ -1,4 +1,4 @@
-package org.clayman.safe.api.service;
+package org.clayman.safe.api.service.scheduled;
 
 import org.clayman.safe.api.entity.Order;
 import org.clayman.safe.api.repository.OrderRepository;

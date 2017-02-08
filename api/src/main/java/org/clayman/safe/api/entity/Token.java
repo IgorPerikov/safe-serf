@@ -15,16 +15,20 @@ public class Token {
     @Column(name = "hashed_password")
     private String hashedPassword;
 
-    @Column(name = "balance")
-    private Integer balance;
+    @Column(name = "maximum_balance")
+    private Integer maximumBalance;
+
+    @Column(name = "current_balance")
+    private Integer currentBalance;
 
     public Token() {}
 
-    public Token(String tokenId, String login, String hashedPassword, Integer balance) {
+    public Token(String tokenId, String login, String hashedPassword, Integer maximumBalance, Integer currentBalance) {
         this.tokenId = tokenId;
         this.login = login;
         this.hashedPassword = hashedPassword;
-        this.balance = balance;
+        this.maximumBalance = maximumBalance;
+        this.currentBalance = currentBalance;
     }
 
     public String getTokenId() {
@@ -51,11 +55,19 @@ public class Token {
         this.hashedPassword = hashedPassword;
     }
 
-    public Integer getBalance() {
-        return balance;
+    public Integer getMaximumBalance() {
+        return maximumBalance;
     }
 
-    public void setBalance(Integer balance) {
-        this.balance = balance;
+    public void setMaximumBalance(Integer maximumBalance) {
+        this.maximumBalance = maximumBalance;
+    }
+
+    public Integer getCurrentBalance() {
+        return currentBalance;
+    }
+
+    public void setCurrentBalance(Integer currentBalance) {
+        this.currentBalance = currentBalance;
     }
 }

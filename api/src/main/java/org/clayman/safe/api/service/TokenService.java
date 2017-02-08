@@ -41,7 +41,7 @@ public class TokenService {
             throw new UserAlreadyExistedException();
         }
         String tokenId = UUID.randomUUID().toString();
-        Token token = new Token(tokenId, login, hashUtility.generateHash(password), DEFAULT_BALANCE);
+        Token token = new Token(tokenId, login, hashUtility.generateHash(password), DEFAULT_BALANCE, DEFAULT_BALANCE);
         tokenRepository.registerNewToken(token);
         return new TokenDto(token);
     }

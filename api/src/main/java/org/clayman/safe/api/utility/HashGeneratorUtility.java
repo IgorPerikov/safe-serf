@@ -1,6 +1,5 @@
 package org.clayman.safe.api.utility;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +9,6 @@ import java.security.MessageDigest;
 @Service
 public class HashGeneratorUtility {
 
-    @Autowired
     private MessageDigest md;
 
     @Value("${hash.secret:some_default_secret_key}")

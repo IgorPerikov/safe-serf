@@ -1,9 +1,6 @@
 package org.clayman.safe.api.repository;
 
-import com.datastax.driver.core.ConsistencyLevel;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.core.Statement;
+import com.datastax.driver.core.*;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
@@ -14,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.concurrent.Executors;
 
 @Repository
 public class TokenRepository {
@@ -74,5 +73,17 @@ public class TokenRepository {
 
     public void registerNewToken(Token token) {
         mapper.save(token);
+    }
+
+    // TODO: async + move to background worker?
+    public void refreshAllBalances() {
+        List<Token> tokens = mapper.map(session.execute("Select * from orders.tokens")).all();
+        for (Token token : tokens) {
+            Statement statement = QueryBuilder
+                    .update(TABLE_NAME)
+                    .where(QueryBuilder.eq("token_id", token.getTokenId()))
+                    .with(QueryBuilder.set("current_balance", token.getMaximumBalance()));
+            session.execute(statement);
+        }
     }
 }

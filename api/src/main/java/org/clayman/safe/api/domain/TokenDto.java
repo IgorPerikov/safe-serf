@@ -6,20 +6,23 @@ public class TokenDto {
 
     private String login;
     private String token;
-    private Integer balance;
+    private Integer maximumBalance;
+    private Integer currentBalance;
 
     public TokenDto() {}
 
     public TokenDto(Token token) {
         this.login = token.getLogin();
         this.token = token.getTokenId();
-        this.balance = token.getBalance();
+        this.maximumBalance = token.getMaximumBalance();
+        this.currentBalance = token.getCurrentBalance();
     }
 
-    public TokenDto(String login, String token, Integer balance) {
+    public TokenDto(String login, String token, Integer maximumBalance, Integer currentBalance) {
         this.login = login;
         this.token = token;
-        this.balance = balance;
+        this.maximumBalance = maximumBalance;
+        this.currentBalance = currentBalance;
     }
 
     public String getLogin() {
@@ -38,11 +41,19 @@ public class TokenDto {
         this.token = token;
     }
 
-    public Integer getBalance() {
-        return balance;
+    public Integer getMaximumBalance() {
+        return maximumBalance;
     }
 
-    public void setBalance(Integer balance) {
-        this.balance = balance;
+    public void setMaximumBalance(Integer maximumBalance) {
+        this.maximumBalance = maximumBalance;
+    }
+
+    public Integer getCurrentBalance() {
+        return currentBalance;
+    }
+
+    public void setCurrentBalance(Integer currentBalance) {
+        this.currentBalance = currentBalance;
     }
 }
