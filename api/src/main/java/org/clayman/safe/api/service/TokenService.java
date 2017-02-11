@@ -2,6 +2,7 @@ package org.clayman.safe.api.service;
 
 import org.clayman.safe.api.domain.TokenDto;
 import org.clayman.safe.api.entity.Token;
+import org.clayman.safe.api.exception.UnregisteredTokenException;
 import org.clayman.safe.api.exception.UserAlreadyExistedException;
 import org.clayman.safe.api.exception.ZeroBalanceException;
 import org.clayman.safe.api.repository.TokenRepository;
@@ -28,7 +29,10 @@ public class TokenService {
 
     public void validateToken(String token) {
         TokenDto tokenDto = returnTokenById(token);
-        if (tokenDto == null || tokenDto.getCurrentBalance() <= 0) {
+        if (tokenDto == null) {
+            throw new UnregisteredTokenException();
+        }
+        if (tokenDto.getCurrentBalance() <= 0) {
             throw new ZeroBalanceException();
         }
     }
