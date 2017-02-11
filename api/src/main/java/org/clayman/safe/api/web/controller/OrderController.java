@@ -22,9 +22,8 @@ public class OrderController {
     private OrderResultService orderResultService;
 
     @PostMapping("/order")
-    public ResponseEntity<Order> createOrder(@RequestBody @Valid Order order) {
-        // TODO: add token check
-        return ResponseEntityBuilder.of(orderService.acceptOrder(order));
+    public ResponseEntity<Order> createOrder(@RequestBody @Valid Order order, @RequestParam String token) {
+        return ResponseEntityBuilder.of(orderService.acceptOrder(order, token));
     }
 
     @GetMapping("/order/{id}/result")

@@ -21,7 +21,11 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public Order acceptOrder(Order order) {
+    @Autowired
+    private TokenService tokenService;
+
+    public Order acceptOrder(Order order, String token) {
+        tokenService.validateToken(token);
         order.setId(UUID.randomUUID());
         log.info("Got new order, set id to {}", order.getId().toString());
         handleNewOrder(order);

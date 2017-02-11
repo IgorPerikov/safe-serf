@@ -3,6 +3,7 @@ package org.clayman.safe.api.service;
 import org.clayman.safe.api.domain.TokenDto;
 import org.clayman.safe.api.entity.Token;
 import org.clayman.safe.api.exception.UserAlreadyExistedException;
+import org.clayman.safe.api.exception.ZeroBalanceException;
 import org.clayman.safe.api.repository.TokenRepository;
 import org.clayman.safe.api.utility.HashGeneratorUtility;
 import org.clayman.safe.api.utility.TokenTransformer;
@@ -24,6 +25,13 @@ public class TokenService {
     private TokenRepository tokenRepository;
 
     private TokenTransformer tokenTransformer = new TokenTransformer();
+
+    public void validateToken(String token) {
+        TokenDto tokenDto = returnTokenById(token);
+        if (tokenDto == null || tokenDto.getCurrentBalance() <= 0) {
+            throw new ZeroBalanceException();
+        }
+    }
 
     public TokenDto returnTokenForUser(String login, String password) {
         Token token = tokenRepository.findByLoginAndPassword(login, hashUtility.generateHash(password));
